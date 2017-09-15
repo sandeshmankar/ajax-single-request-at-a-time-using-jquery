@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript">
+	$("#submit").click(function(){	
+	
+	var firstname = $("#firstname").val();	
+	var lastname = $("#lastname").val();	
+
+	var me = $(this);
+   	    event .preventDefault();
+        if ( me.data('requestRunning') ) {
+         return;
+        }
+    me.data('requestRunning', true);
+	
+	$.ajax({
+
+        type: "POST",
+        url : "include/data.php",
+        data: {firstname:firstname,lastname:lastname},
+        cache: false,
+       	beforeSend: function(html)
+       	{      
+	        document.getElementById("result_data").innerHTML = '';
+	        $("#loading_image").show();
+	        $("#loading_image").html('<img src="img/loader.gif" /> Loading...');
+		},
+       success: function(html){        
+        $("#result_data").show();
+        $("#result_data").append(html);
+        $("#loading_image").hide();  
+       },
+     	 complete: function() {
+            me.data('requestRunning', false);
+         }  	
+   	 });
+        return false;	
+		
+	});
+	</script>
+</head>
+<body>
+
+	<div id="loading_image"></div> <!-- Loading image when page not responce-->
+	<div id="result_data"></div> <!-- responce Result Show -->
+
+	<form action="" method="POST">
+	  First name:<br>
+	  <input type="text" id="firstname" value="Mickey">
+	  <br>
+	  Last name:<br>
+	  <input type="text" id="lastname" value="Mouse">
+	  <br><br>
+	  <input type="submit" id="submit" value="Submit">
+	</form> 
+
+
+</body>
+</html>
